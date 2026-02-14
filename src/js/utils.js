@@ -1,10 +1,8 @@
-export function saveRecent(search) {
-  let recent = JSON.parse(localStorage.getItem("recent")) || [];
-  recent = recent.filter((i) => i !== search);
-  recent.unshift(search);
-  localStorage.setItem("recent", JSON.stringify(recent.slice(0, 5)));
+export function saveToStorage(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
 }
 
-export function getRecent() {
-  return JSON.parse(localStorage.getItem("recent")) || [];
+export function loadFromStorage(key) {
+  return JSON.parse(localStorage.getItem(key)) || [];
 }
+

@@ -1,8 +1,13 @@
-import { searchCountry, loadRecent } from "./search.js";
+import { searchCountry } from "./search.js";
 
-document.getElementById("searchBtn").addEventListener("click", () => {
-  const value = document.getElementById("searchInput").value.trim();
-  if (value) searchCountry(value);
+const btn = document.getElementById("searchBtn");
+btn.addEventListener("click", () => {
+  const val = document.getElementById("searchInput").value.trim();
+  if (val) searchCountry(val);
 });
 
-loadRecent();
+// Dark mode toggle
+const toggle = document.getElementById("themeToggle");
+toggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+});

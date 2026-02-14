@@ -1,41 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>World Travel Finder</title>
-    <meta name="description" content="Find country info and top attractions" />
-  <script type="module" crossorigin src="/assets/index-ZVAmAKJE.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-ui5kVTlT.css">
+    <meta charset="UTF-8">
+    <title>World Travel & Attraction Finder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover countries and top tourist attractions worldwide">
+  <script type="module" crossorigin src="/assets/index-C3kMsxo5.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-GxVOJDlF.css">
 </head>
 
 <body>
-    <header>
-        <h1>🌍 World Travel & Attraction Finder</h1>
+    <header class="header">
+        <div class="logo">🌍 World Travel Finder</div>
         <nav>
             <a href="index.html">Home</a>
             <a href="favorites.html">Favorites</a>
-            <button id="themeToggle">🌓</button>
+            <a href="about.html">About</a>
+            <button id="themeToggle">🌙 Dark Mode</button>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <h2>Explore Countries & Attractions</h2>
-            <p>
-                Search for any country to see key information and top tourist
-                attractions.
-            </p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Explore the World</h1>
+            <p>Search any country and discover its top attractions with images.</p>
+        </div>
+    </section>
 
-            <input id="searchInput" placeholder="Enter country name" />
+    <main class="container">
+        <!-- Search Section -->
+        <section class="search-box">
+            <input id="searchInput" type="text" placeholder="Enter a country name..." />
             <button id="searchBtn">Search</button>
         </section>
 
-        <section>
-            <h3>Recent Searches</h3>
-            <ul id="recentList"></ul>
-        </section>
+        <!-- Recent Searches -->
+        <section id="recentSearches" class="recent"></section>
+
+        <!-- Error Display -->
+        <section id="error" class="error hidden"></section>
+
+        <!-- Country Info & Attractions -->
+        <section id="result" class="grid"></section>
     </main>
+
+    <footer>
+        <p>© 2026 World Travel Finder</p>
+    </footer>
 
 </body>
 

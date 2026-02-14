@@ -1,55 +1,39 @@
-import { getCountry, getAttractions } from "./api.js";
-import { renderCountry, renderAttractions, renderRecent } from "./ui.js";
+import { getCountryData } from "./country.js";
+import { getAttractions, getAttractionDetails } from "./attractions.js";
+import { getImage } from "./images.js";
+import { renderCountry, renderAttractionCard } from "./ui.js";
+import { saveToStorage, loadFromStorage } from "./utils.js";
 
 export async function searchCountry(name) {
+  const resultDiv = document.getElementById("result");
   const errorBox = document.getElementById("error");
+  const recentDiv = document.getElementById("recentSearches");
+
   errorBox.classList.add("hidden");
+  resultDiv.innerHTML = "";
 
   try {
-    const country = await getCountry(name);
-    document.getElementById("countryDisplay").innerHTML = renderCountry(country);
+    const country = await getCountryData(name);
+    resultDiv.innerHTML += renderCountry(country);
 
-    const attractions = await getAttractions(country.cca2);
-    document.getElementById("attractions").innerHTML = renderAttractions(attractions);
+    // Recent searches
+    let recent = loadFromStorage("recent");
+    if (!recent.includes(name)) recent.unshift(name);
+    recent = recent.slice(0, 5);
+    saveToStorage("recent", recent);
+    recentDiv.innerHTML = `<h4>Recent Searches:</h4> ${recent.map(r => `<span>${r}</span>`).join(", ")}`;
 
-    saveRecent(name);
-    loadRecent();
-    enableAttractionClicks();
+    const [lat, lon] = country.latlng;
+    const attractions = await getAttractions(lat, lon);
+
+    for (const place of attractions) {
+      const details = await getAttractionDetails(place.properties.xid);
+      const image = details.preview?.source || await getImage(details.name);
+      resultDiv.innerHTML += renderAttractionCard(details.name, image, details.kinds);
+    }
+
   } catch (err) {
     errorBox.textContent = err.message;
     errorBox.classList.remove("hidden");
   }
-}
-
-function saveRecent(name) {
-  let recent = JSON.parse(localStorage.getItem("recent")) || [];
-  if (!recent.includes(name)) recent.unshift(name);
-  localStorage.setItem("recent", JSON.stringify(recent.slice(0, 5)));
-}
-
-export function loadRecent() {
-  const recent = JSON.parse(localStorage.getItem("recent")) || [];
-  document.getElementById("recentSearches").innerHTML =
-    "<strong>Recent:</strong> " + renderRecent(recent);
-
-  document.querySelectorAll("#recentSearches span").forEach(span => {
-    span.addEventListener("click", () => {
-      searchCountry(span.dataset.name);
-    });
-  });
-}
-
-function enableAttractionClicks() {
-  document.querySelectorAll(".card").forEach(card => {
-    card.addEventListener("click", () => {
-      saveAttraction(card.dataset.name);
-      alert("Attraction saved!");
-    });
-  });
-}
-
-function saveAttraction(name) {
-  let favs = JSON.parse(localStorage.getItem("attractions")) || [];
-  if (!favs.includes(name)) favs.push(name);
-  localStorage.setItem("attractions", JSON.stringify(favs));
 }

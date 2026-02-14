@@ -2,25 +2,21 @@ export function renderCountry(c) {
   return `
     <h2>${c.name.common}</h2>
     <img src="${c.flags.svg}" alt="Flag of ${c.name.common}" />
-    <p><strong>Capital:</strong> ${c.capital}</p>
-    <p><strong>Population:</strong> ${c.population.toLocaleString()}</p>
-    <p><strong>Region:</strong> ${c.region}</p>
-    <p><strong>Currency:</strong> ${Object.values(c.currencies)[0].name}</p>
+    <p>Capital: ${c.capital}</p>
+    <p>Population: ${c.population.toLocaleString()}</p>
+    <p>Region: ${c.region}</p>
+    <p>Languages: ${Object.values(c.languages).join(", ")}</p>
+    <p>Currency: ${Object.values(c.currencies)[0].name}</p>
+    <h3>Top Attractions</h3>
   `;
 }
 
-export function renderAttractions(list) {
-  if (!list || list.length === 0) {
-    return "<p>No top attractions available.</p>";
-  }
-
-  return list.map(item => `
+export function renderAttractionCard(name, image, kinds) {
+  return `
     <div class="card">
-      <h4>📍 ${item.name}</h4>
+      <h4>📍 ${name}</h4>
+      <img src="${image}" />
+      <p>${kinds}</p>
     </div>
-  `).join("");
-}
-
-export function renderRecent(list) {
-  return list.map(name => `<span data-name="${name}">${name}</span>`).join("");
+  `;
 }

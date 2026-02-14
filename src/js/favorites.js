@@ -1,13 +1,12 @@
-const list = document.getElementById("favoritesList");
-const attractions = JSON.parse(localStorage.getItem("attractions")) || [];
+import { loadFromStorage } from "./utils.js";
 
-if (attractions.length === 0) {
-  list.innerHTML = "<li>No saved attractions yet.</li>";
-} else {
-  attractions.forEach(name => {
-    const li = document.createElement("li");
-    li.textContent = name;
-    list.appendChild(li);
-  });
-}
+const list = document.getElementById("favoritesList");
+const favorites = loadFromStorage("favorites");
+
+favorites.forEach(fav => {
+  const div = document.createElement("div");
+  div.classList.add("card");
+  div.innerHTML = `<h4>${fav}</h4>`;
+  list.appendChild(div);
+});
 
