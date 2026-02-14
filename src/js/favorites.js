@@ -1,14 +1,13 @@
-const cList = document.getElementById("favCountries");
-const aList = document.getElementById("favAttractions");
+const list = document.getElementById("favoritesList");
+const attractions = JSON.parse(localStorage.getItem("attractions")) || [];
 
-(JSON.parse(localStorage.getItem("favCountries")) || []).forEach((c) => {
-  const li = document.createElement("li");
-  li.textContent = c;
-  cList.appendChild(li);
-});
+if (attractions.length === 0) {
+  list.innerHTML = "<li>No saved attractions yet.</li>";
+} else {
+  attractions.forEach(name => {
+    const li = document.createElement("li");
+    li.textContent = name;
+    list.appendChild(li);
+  });
+}
 
-(JSON.parse(localStorage.getItem("favAttractions")) || []).forEach((a) => {
-  const li = document.createElement("li");
-  li.textContent = a;
-  aList.appendChild(li);
-});

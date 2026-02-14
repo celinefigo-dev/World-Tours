@@ -1,4 +1,5 @@
 {
+    "$schema": "https://json.schemastore.org/package.json",
     "name": "world-travel-attraction-finder",
     "version": "1.0.0",
     "description": "WDD330 Final Project - A web app to explore countries and top tourist attractions using public APIs",
