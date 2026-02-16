@@ -1,4 +1,4 @@
-const OPENTRIP_API_KEY = "YOUR_OPENTRIP_API_KEY";
+const OPENTRIP_API_KEY = "1d68a99355mshf58a1039113f98fp1ebf7bjsnfd1d17012fbb";
 
 export async function getAttractions(lat, lon) {
     const res = await fetch(

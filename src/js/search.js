@@ -1,39 +1,43 @@
 import { getCountryData } from "./country.js";
 import { getAttractions, getAttractionDetails } from "./attractions.js";
-import { getImage } from "./images.js";
 import { renderCountry, renderAttractionCard } from "./ui.js";
-import { saveToStorage, loadFromStorage } from "./utils.js";
+import { getImage } from "./images.js";
 
 export async function searchCountry(name) {
-  const resultDiv = document.getElementById("result");
-  const errorBox = document.getElementById("error");
-  const recentDiv = document.getElementById("recentSearches");
-
-  errorBox.classList.add("hidden");
-  resultDiv.innerHTML = "";
+  const result = document.getElementById("result");
+  result.innerHTML = "";
 
   try {
+    // 1. Get country
     const country = await getCountryData(name);
-    resultDiv.innerHTML += renderCountry(country);
-
-    // Recent searches
-    let recent = loadFromStorage("recent");
-    if (!recent.includes(name)) recent.unshift(name);
-    recent = recent.slice(0, 5);
-    saveToStorage("recent", recent);
-    recentDiv.innerHTML = `<h4>Recent Searches:</h4> ${recent.map(r => `<span>${r}</span>`).join(", ")}`;
+    result.innerHTML += renderCountry(country);
 
     const [lat, lon] = country.latlng;
+
+    // 2. Get attractions
     const attractions = await getAttractions(lat, lon);
 
-    for (const place of attractions) {
-      const details = await getAttractionDetails(place.properties.xid);
-      const image = details.preview?.source || await getImage(details.name);
-      resultDiv.innerHTML += renderAttractionCard(details.name, image, details.kinds);
+    if (!attractions || attractions.length === 0) {
+      result.innerHTML += "<p>No attractions found.</p>";
+      return;
     }
 
-  } catch (err) {
-    errorBox.textContent = err.message;
-    errorBox.classList.remove("hidden");
+    // 3. Take TOP 3
+    const top3 = attractions.slice(0, 3);
+
+    for (const place of top3) {
+      const details = await getAttractionDetails(place.xid);
+      const image = details.preview?.source || await getImage(details.name);
+
+      result.innerHTML += renderAttractionCard(
+        details.name,
+        image,
+        details.kinds
+      );
+    }
+
+  } catch (error) {
+    console.error(error);
+    result.innerHTML = `<p>Error loading data</p>`;
   }
 }

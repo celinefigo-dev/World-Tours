@@ -1,15 +1,16 @@
-export async function getCountry(name) {
-  const res = await fetch('https://api.unsplash.com/search/photos?query=Eiffel+Tower&client_id=YOUR_UNSPLASH_KEY'
-);
-  if (!res.ok) throw new Error("Country not found");
-  const data = await res.json();
-  return data[0];
+const url = 'https://geodb-country-state-city.p.rapidapi.com/states.php';
+const options = {
+  method: 'GET',
+  headers: {
+    'x-rapidapi-key': '1d68a99355mshf58a1039113f98fp1ebf7bjsnfd1d17012fbb',
+    'x-rapidapi-host': 'geodb-country-state-city.p.rapidapi.com'
+  }
+};
+
+try {
+  const response = await fetch(url, options);
+  const result = await response.text();
+  console.log(result);
+} catch (error) {
+  console.error(error);
 }
-
-export async function getAttractions(code) {
-  const res = await fetch(`https://geodb-free-service.wirefreethought.com/v1/geo/countries/${code}/cities`);
-  const data = await res.json();
-  return data.data.slice(0, 5);
-}
-
-
